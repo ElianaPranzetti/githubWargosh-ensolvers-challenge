@@ -31,8 +31,12 @@ export class TagsService {
     }
 
     async createTag(tagDto: CreateTagDto) {
-        const tag = this.tagsRepository.create(tagDto);
-        return await this.tagsRepository.save(tag);
+        const existingTag = await this.tagsRepository.findOneBy({ name: tagDto.name })
+        if (!existingTag) {
+            const tag = this.tagsRepository.create(tagDto);
+            return await this.tagsRepository.save(tag);
+        }
+        return existingTag;
     }
 
     async deleteTag(id: number) {

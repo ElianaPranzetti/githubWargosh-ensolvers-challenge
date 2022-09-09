@@ -19,7 +19,7 @@ export class TasksTags {
         type: 'int',
         name: 'tag_id',
     })
-    tag_id: Number;
+    tag_id: number;
 
     // @ManyToOne(() => Task, (task) => task.id)
     // task_id: Task;

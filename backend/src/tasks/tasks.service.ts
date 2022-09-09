@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Task, TasksTags } from "../entities";
-import { ReadTaskDto, CreateTaskDto, UpdateTaskDto, CreateRelationTagDto } from "./dtos";
+import { ReadTaskDto, CreateTaskDto, UpdateTaskDto, CreateRelationTagDto, FindStatusTaskDto, DeleteTagFromTaskDto } from "./dtos";
 
 @Injectable()
 export class TasksService {
@@ -39,6 +39,12 @@ export class TasksService {
 
         const tags = await this.getTagsFromTask(task)
         return { ...task, tags };
+    }
+
+    async getTaskFromStatus(_task: FindStatusTaskDto): Promise<ReadTaskDto[]> {
+        const allTasks = await this.getTasks()
+
+        return allTasks.filter((task) => task.archived === _task.archived)
     }
 
     async createTask(taskDto: CreateTaskDto) {
@@ -94,5 +100,9 @@ export class TasksService {
 
     async deleteTagsFromTask(idTask: number) {
         await this.taskstagsRepository.delete({ task_id: idTask });
+    }
+
+    async deleteTagFromTask(dto: DeleteTagFromTaskDto) {
+        await this.taskstagsRepository.delete({ task_id: dto.task_id, tag_id: dto.tag_id });
     }
 }

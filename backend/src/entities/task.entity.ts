@@ -27,7 +27,7 @@ export class Task {
         nullable: false,
         default: false
     })
-    done: boolean;
+    archived!: boolean;
 
     @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;

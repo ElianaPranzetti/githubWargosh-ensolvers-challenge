@@ -9,7 +9,7 @@ export class CreateTaskDto {
 
     @IsOptional()
     @IsBoolean()
-    done: boolean;
+    archived: boolean;
 
     @IsOptional()
     @IsArray({})

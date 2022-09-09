@@ -1,4 +1,6 @@
 export * from './create-task.dto'
 export * from './update-task.dto'
 export * from './create-rtag.dto'
-export * from './read.task.dto'
+export * from './read-task.dto'
+export * from './findstatus-tasks.dto'
+export * from './delete-tagfromtask.dto'
