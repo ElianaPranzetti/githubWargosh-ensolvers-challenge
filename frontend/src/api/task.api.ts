@@ -4,7 +4,8 @@ import { TaskDTO, ResponseTasksDTO } from "./dtos/task.dto"
 import { UpdateTaskDTO } from "./dtos/update-task.dto"
 
 export class TaskAPI {
-    private static serverURI: string = 'http://localhost:3000'
+    // private static serverURI: string = 'http://localhost:3000'
+    private static serverURI: string = 'https://project-notes-web.herokuapp.com'
 
     public static async getAll(): Promise<ResponseTasksDTO> {
         const resp = await fetch(`${this.serverURI}/tasks`, {

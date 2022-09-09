@@ -2,7 +2,8 @@ import { CreateTagDTO } from "./dtos/create-tag.dto"
 import { TagDTO, ResponseTagsDTO } from "./dtos/tag.dto"
 
 export class TagAPI {
-    private static serverURI: string = 'http://localhost:3000'
+    // private static serverURI: string = 'http://localhost:3000'
+    private static serverURI: string = 'https://project-notes-web.herokuapp.com'
 
     public static async getAllTags(): Promise<ResponseTagsDTO> {
         const resp = await fetch(`${this.serverURI}/tags`, {
