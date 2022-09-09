@@ -29,6 +29,7 @@ export class TaskAPI {
     }
 
     public static async saveTask(task: CreateTaskDTO): Promise<TaskDTO> {
+        console.log('saving');
         const resp = await fetch(`${this.serverURI}/tasks`, {
             method: 'POST',
             headers: {
@@ -36,8 +37,9 @@ export class TaskAPI {
             },
             body: JSON.stringify(task)
         })
-
+        
         const data = resp.json()
+        console.log('saved', data);
         return data
     }
 

@@ -1,21 +1,31 @@
-import React from 'react'
+import { Button, Modal } from "react-bootstrap";
 
-function ModalAlert() {
+type Props = {
+    showModal: boolean;
+    handleClose: () => void;
+    confirmAction: () => void;
+}
+
+function ModalAlert({ showModal, handleClose, confirmAction }: Props) {
     return (
-        <div className="modal__background">
-            <div className="modal__container">
-                <button> X </button>
-                <div className="modal__header">
-                </div>
-                <div className="modal__body">
+        <>
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>ATENTION!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="modal-content">
                     <h2>Are you sure you want to delete this note?</h2>
-
-                </div>
-                <div className="modal__footer">
-
-                </div>
-            </div>
-        </div>
+                </Modal.Body>
+                <Modal.Footer className="modal-footer">
+                    <Button variant="secondary" type="button" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="danger" type="button" onClick={confirmAction}>
+                        Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
     )
 }
 

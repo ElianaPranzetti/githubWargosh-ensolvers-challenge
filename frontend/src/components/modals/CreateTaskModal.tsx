@@ -5,11 +5,14 @@ import { TaskAPI } from '../../api/task.api';
 import { TaskDTO } from '../../api/dtos/task.dto';
 import useFormatText from '../../hooks/useFormatText'
 import { TagDTO } from '../../api/dtos/tag.dto';
+import { TagAPI } from '../../api/tag.api';
+import { FaRegTrashAlt } from 'react-icons/fa';
 
 type Props = {
     showModal: boolean;
     handleClose: () => void;
     onTaskCreated: (task: TaskDTO) => void;
+    setTagNames: (tags: TagDTO[]) => void;
     tagNames: TagDTO[];
 };
 
@@ -18,16 +21,40 @@ interface Tag {
     name: string;
 }
 
-const CreateTaskModal = ({ showModal, handleClose, onTaskCreated, tagNames }: Props) => {
+const CreateTaskModal = ({ showModal, handleClose, onTaskCreated, tagNames, setTagNames }: Props) => {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [tags, setTags] = useState<number[]>([])
-    const [tag, setTag] = useState<Tag>()
+    const [tag, setTag] = useState<Tag>({ name: '' })
 
     const { formatText } = useFormatText()
 
     const addTag = (nameTag: string) => {
         setTag({ name: nameTag })
+    }
+
+    const createTag = () => {
+        if (tag.name.length > 0) {
+            saveTag(tag.name)
+            setTag({ name: '' })
+        }
+    }
+
+    const saveTag = async (name: string) => {
+        const tag = {
+            name: formatText(name),
+        }
+        const resp = await TagAPI.saveTag(tag);
+        console.log('new tag', resp);
+        const tagExist = tagNames.find((t) => t.id === resp.id)
+        if (!tagExist) {
+            setTagNames([...tagNames, resp])
+        }
+        setTags([...tags, resp.id])
+    }
+
+    const removeTag = async (tagId: number) => {
+        setTags(tags.filter(t => t !== tagId))
     }
 
     const createTask = async () => {
@@ -38,8 +65,7 @@ const CreateTaskModal = ({ showModal, handleClose, onTaskCreated, tagNames }: Pr
             tags: tags
         }
         const resp = await TaskAPI.saveTask(task);
-
-        onTaskCreated(resp);
+        onTaskCreated({ ...task, id: resp.id });
         console.log('new task', resp);
         handleClose()
     }
@@ -74,8 +100,9 @@ const CreateTaskModal = ({ showModal, handleClose, onTaskCreated, tagNames }: Pr
                             <ListGroup>
                                 {
                                     tags.map((t) =>
-                                        <ListGroup.Item className="m-0 p-1" action onClick={() => alert("")}>
+                                        <ListGroup.Item key={t} className="m-0 p-1" action>
                                             {tagNames.find((x) => x.id === t)?.name}
+                                            <FaRegTrashAlt onClick={() => removeTag(t)} />
                                         </ListGroup.Item>
                                     )
                                 }
@@ -90,7 +117,7 @@ const CreateTaskModal = ({ showModal, handleClose, onTaskCreated, tagNames }: Pr
                                     />
                                 </div>
                                 <div className="col-2">
-                                    <Button variant="primary" type="button" onClick={handleClose}>
+                                    <Button variant="primary" type="button" onClick={createTag}>
                                         Add
                                     </Button>
                                 </div>

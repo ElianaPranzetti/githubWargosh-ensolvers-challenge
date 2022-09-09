@@ -1,6 +1,7 @@
 import { Badge } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import { FaFileArchive, FaFileDownload } from 'react-icons/fa';
 import { TagDTO } from '../api/dtos/tag.dto';
 import { TaskDTO } from '../api/dtos/task.dto'
 import { TaskAPI } from "../api/task.api";
@@ -8,15 +9,28 @@ import { TaskAPI } from "../api/task.api";
 type Props = {
     data: TaskDTO;
     onTaskDeleted: (taskId: number) => void;
+    onOpenModal: (task: TaskDTO) => void;
     onTaskUpdated: (task: TaskDTO) => void;
+    onAlertModal: (task: TaskDTO) => void;
     tags: TagDTO[];
 }
 
-const Task = ({ data, onTaskDeleted, onTaskUpdated, tags }: Props) => {
+const Task = ({ data, onTaskDeleted, onTaskUpdated, onOpenModal, tags, onAlertModal }: Props) => {
     const deleteTask = async () => {
         await TaskAPI.deleteTask(data.id);
         onTaskDeleted(data.id)
     }
+
+    const editStatusTask = async (status: boolean) => {
+        data.archived = status;
+        console.log('updating status to', data);
+        
+        const resp = await TaskAPI.updateTask(data.id, data)
+        onTaskUpdated(resp);
+    }
+
+    const handleArchiveTask = () => editStatusTask(true);
+    const handleUnarchiveTask = () => editStatusTask(false);
 
     return (
         <>
@@ -33,12 +47,21 @@ const Task = ({ data, onTaskDeleted, onTaskUpdated, tags }: Props) => {
                     <Card.Text>{data.description}</Card.Text>
                 </Card.Body>
                 <Card.Footer>
-                    <Button variant="danger" type="button" onClick={deleteTask}>
+                    <Button variant="danger" type="button" onClick={() => onAlertModal(data)}>
                         Delete
                     </Button>
-                    <Button variant="primary" type="button" onClick={() => onTaskUpdated(data)}>
+                    <Button variant="primary" type="button" onClick={() => onOpenModal(data)}>
                         Edit
                     </Button>
+                    {
+                        (!data.archived) ?
+                            <Button variant="secondary" type="button" onClick={handleArchiveTask}>
+                                Archive <FaFileArchive />
+                            </Button> :
+                            <Button variant="secondary" type="button" onClick={handleUnarchiveTask}>
+                                Unarchive <FaFileDownload />
+                            </Button>
+                    }
                 </Card.Footer>
             </Card>
         </>
