@@ -1,3 +1,3 @@
 # githubWargosh-ensolvers-challenge
 
-Project deployed [here](https://project-notes-web-frontend.herokuapp.com) using heroku and making use of RDS to store data in the AWS cloud
+Project deployed [here](https://631bf108ce733f5a1366e0c6--leafy-biscotti-a0c51f.netlify.app) using heroku, netlify and making use of RDS to store data in the AWS cloud
