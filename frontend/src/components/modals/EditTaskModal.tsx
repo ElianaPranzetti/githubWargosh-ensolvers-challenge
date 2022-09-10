@@ -27,13 +27,11 @@ const EditTaskModal = ({ showModal, handleClose, onTaskUpdated, data, tagNames, 
     const [description, setDescription] = useState('')
     const [tags, setTags] = useState<number[]>([])
     const [tag, setTag] = useState<Tag>({ name: '' })
-    const [isArchived, setIsArchived] = useState(false)
 
     useEffect(() => {
         if (data) {
             setTitle(data.title)
             setDescription(data.description)
-            setIsArchived(data.archived)
             setTags(data.tags)
         }
     }, [data])
@@ -66,7 +64,7 @@ const EditTaskModal = ({ showModal, handleClose, onTaskUpdated, data, tagNames, 
 
     const removeTag = async (tagId: number) => {
         if (data) {
-            const resp = await TaskAPI.deleteTagFromTask({ task_id: data.id, tag_id: tagId })
+            await TaskAPI.deleteTagFromTask({ task_id: data.id, tag_id: tagId })
         }
     }
 

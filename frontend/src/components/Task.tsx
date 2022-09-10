@@ -16,11 +16,6 @@ type Props = {
 }
 
 const Task = ({ data, onTaskDeleted, onTaskUpdated, onOpenModal, tags, onAlertModal }: Props) => {
-    const deleteTask = async () => {
-        await TaskAPI.deleteTask(data.id);
-        onTaskDeleted(data.id)
-    }
-
     const editStatusTask = async (status: boolean) => {
         data.archived = status;
         console.log('updating status to', data);

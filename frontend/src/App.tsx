@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import { TaskAPI } from './api/task.api';
 import { TagAPI } from './api/tag.api';
@@ -73,8 +73,12 @@ function App() {
 
   useEffect(() => {
     if (toggleFilterTags) {
-      const res = tasks.filter(t => { if (t.tags.find(t => t === toggleFilterTags)) return t })
-      setShowTasks(res)
+      setShowTasks(tasks.filter(t => {
+        if (t.tags.find(t => t === toggleFilterTags))
+          return t
+        else
+          return null
+      }))
     } else {
       fetchAllTasks()
     }
